@@ -38,7 +38,7 @@ def task_1():
     print("----- Task 1.2 -----")
     best_gs_nn = perform_grid_search(X_train_pca, y_train)
 
-    final_model = None # TODO: Choose the best model from *all* previous Tasks
+    final_model = best_gs_nn # TODO: Choose the best model from *all* previous Tasks
 
     X_test_pca = pca.transform(X_test)
     show_confusion_matrix_and_classification_report(final_model, X_test_pca, y_test)
@@ -64,7 +64,6 @@ def task_2():
     
     test_acc = nn.score(X_test_pca, y_test)
     print(f'Test accuracy: {test_acc:.4f}.')
-
 
 def task_3():
     features = np.load('data/brain_tumor_images.npy')
@@ -95,8 +94,8 @@ def task_3():
 
 
 def main():
-    task_1()
-    # task_2()
+    # task_1()
+    task_2()
     # task_3()
 
 

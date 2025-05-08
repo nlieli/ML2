@@ -39,7 +39,19 @@ class Neuron(Module):
         :param x: List of Scalar values, representing the inputs to the neuron
         """
         # TODO: Implement the forward pass through the neuron.
-        raise NotImplementedError('Task 2.1 not implemented')
+
+        output = 0
+
+        for wi, xi in zip(self.w, x):
+            output += wi * xi
+        output += self.b
+        
+        if self.use_relu:
+            output = output.relu()
+        
+        return Scalar(output)
+  
+        # raise NotImplementedError('Task 2.1 not implemented')
 
     def parameters(self):
         return self.w + [self.b]
@@ -57,7 +69,10 @@ class FeedForwardLayer(Module):
         """
         # TODO: Initialize the neurons in the layer. `self.neurons` should be a List of Neuron objects.
         self.neurons = None
-        raise NotImplementedError('Task 2.2 not implemented')
+
+
+        
+        # raise NotImplementedError('Task 2.2 not implemented')
 
     def __call__(self, x: List[Scalar]) -> List[Scalar]:
         """

@@ -141,9 +141,17 @@ def show_confusion_matrix_and_classification_report(nn: MLPClassifier, X_test: n
     :param X_test: Test features (PCA-projected)
     :param y_test: Test targets
     """
+
     # TODO: Use `nn` to compute predictions on `X_test`.
     #       Use `confusion_matrix` and `ConfusionMatrixDisplay` to plot the confusion matrix on the test data.
     #       Use `classification_report` to print the classification report.
+    y_predict = nn.predict(X_test)
+    matrix = confusion_matrix(y_test, y_predict)
+    Conf_M = ConfusionMatrixDisplay(confusion_matrix=matrix)
+    Conf_M.plot()
+    plt.show()
+    print(classification_report(y_test, y_predict))
+
 
 
 def perform_grid_search(X_train: np.ndarray, y_train: np.ndarray) -> MLPClassifier:
@@ -160,4 +168,13 @@ def perform_grid_search(X_train: np.ndarray, y_train: np.ndarray) -> MLPClassifi
     #       Print the best score (mean cross validation score) and the best parameter set.
     #       Return the best estimator found by GridSearchCV.
 
-    return None
+    dictionary = {"alpha": [0.0, 0.1, 1.0], "batch_size": [32, 512], "hidden_layer_sizes": [(128,), (256,)]}
+    mlp = MLPClassifier(max_iter=100, solver='adam', random_state=42)
+    grd = GridSearchCV(estimator=mlp, param_grid=dictionary, cv=5, verbose=4)
+    grd.fit(X_train, y_train)
+    best_params = grd.best_params_
+    print("Best score", grd.best_score_)
+    print("Best parameters", best_params)
+
+    return grd.best_estimator_
+    
