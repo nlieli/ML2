@@ -49,7 +49,7 @@ class Neuron(Module):
         if self.use_relu:
             output = output.relu()
         
-        return Scalar(output)
+        return output
   
         # raise NotImplementedError('Task 2.1 not implemented')
 
@@ -68,7 +68,7 @@ class FeedForwardLayer(Module):
         :param num_outputs: Number of neurons in that layer
         """
         # TODO: Initialize the neurons in the layer. `self.neurons` should be a List of Neuron objects.
-        self.neurons = None
+        self.neurons = [Neuron(num_inputs, use_relu) for i in range(num_outputs)]
 
 
         
@@ -80,8 +80,9 @@ class FeedForwardLayer(Module):
 
         :param x: List of Scalar values, representing the input features
         """
-        raise NotImplementedError('Task 2.2 not implemented')
-        return None
+        # raise NotImplementedError('Task 2.2 not implemented')
+        output = [neuron(x) for neuron in self.neurons]
+        return output
 
     def parameters(self):
         return [p for n in self.neurons for p in n.parameters()]
@@ -100,8 +101,14 @@ class MultiLayerPerceptron(Module):
         :param num_outputs: Number of output neurons
         """
         # TODO: `self.layers` should be a List of FeedForwardLayer objects.
-        self.layers = None
-        raise NotImplementedError('Task 2.3 not implemented')
+        self.layers = []
+        self.layers.append(FeedForwardLayer(num_inputs, num_hidden[0], False))
+        for i in range(len(num_hidden) - 1):
+            self.layers.append(FeedForwardLayer(num_hidden[i], num_hidden[i+1], True))
+        self.layers.append(FeedForwardLayer(num_hidden[-1], num_outputs, False))
+
+
+        # raise NotImplementedError('Task 2.3 not implemented')
 
     def __call__(self, x: List[Scalar]) -> List[Scalar]:
         """
@@ -111,8 +118,12 @@ class MultiLayerPerceptron(Module):
 
         :param x: List of Scalar values, representing the input features
         """
-        raise NotImplementedError('Task 2.3 not implemented')
-        return None
+        # raise NotImplementedError('Task 2.3 not implemented')
+        for layer in self.layers:
+            output = layer(x)
+            x = output
+
+        return x
 
     def parameters(self):
         return [p for layer in self.layers for p in layer.parameters()]
