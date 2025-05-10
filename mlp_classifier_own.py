@@ -40,8 +40,9 @@ class MLPClassifierOwn():
 
         :param z: Scalar
         """
-        raise NotImplementedError('Task 3.1: Sigmoid not implemented.')
-        return None
+        # raise NotImplementedError('Task 3.1: Sigmoid not implemented.')
+        sig = 1 / (1 + (-z).exp())
+        return sig
 
     @staticmethod
     def multiclass_cross_entropy_loss(y_true: int, probs: List[Scalar]) -> Scalar:
@@ -52,7 +53,7 @@ class MLPClassifierOwn():
         :param probs: List of Scalar values, representing the predicted probabilities for each class
         """
         # raise NotImplementedError('Task 2.4: Multi-class cross-entropy loss not implemented.')
-        mce = -np.log(probs[y_true])
+        mce = (-probs[y_true]).log()
         return mce
 
     @staticmethod
@@ -63,8 +64,9 @@ class MLPClassifierOwn():
         :param y_true: 0 or 1
         :param prob: Scalar between 0 and 1, representing the probability of the positive class
         """
-        raise NotImplementedError('Task 3.1: Binary cross-entropy loss not implemented.')
-        return None
+        # raise NotImplementedError('Task 3.1: Binary cross-entropy loss not implemented.')
+        bce = (y_true == 1) * (-1) * prob.log() + (y_true == 0) * (-(1 - prob).log())
+        return bce
 
     def l2_regularization_term(self) -> Scalar:
         """
@@ -73,8 +75,15 @@ class MLPClassifierOwn():
         Compute the sum of squared model parameters and weigh this term by alpha/2 * (1 / batch_size).
         Ensure that you return a Scalar object since we need to backpropagate through this term.
         """
-        raise NotImplementedError('Task 2.6: L2 Regularization not implemented.')
-        return None
+        norm = 0
+        for param in self.model.parameters():
+            norm += param ** 2 
+
+        output = self.alpha/(2*self.batch_size) * norm
+
+
+        # raise NotImplementedError('Task 2.6: L2 Regularization not implemented.')
+        return output
 
     def sgd_step(self, learning_rate: float) -> None:
         """
@@ -95,8 +104,8 @@ class MLPClassifierOwn():
         assert self.num_classes > 1, 'Number of classes must be greater than 1'
         if self.num_classes == 2:
             nn_num_outputs = 1
-            raise NotImplementedError('Task 3 (Binary classification) is not implemented. '
-                                      'Thus, number of classes must be greater than 2 (multi-class classification)')
+            # raise NotImplementedError('Task 3 (Binary classification) is not implemented. '
+                                    #   'Thus, number of classes must be greater than 2 (multi-class classification)')
         else:
             nn_num_outputs = self.num_classes
 
