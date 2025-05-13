@@ -53,7 +53,7 @@ class MLPClassifierOwn():
         :param probs: List of Scalar values, representing the predicted probabilities for each class
         """
         # raise NotImplementedError('Task 2.4: Multi-class cross-entropy loss not implemented.')
-        mce = (-probs[y_true]).log()
+        mce = -probs[y_true].log()
         return mce
 
     @staticmethod
